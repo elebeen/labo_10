@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using labo_10.Infrastructure.Repositories;
+using labo_10.Infrastructure.Repositories.Implements;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using labo_10.Application.Interfaces;
-using labo_10.Infrastructure.Repositories;
 using labo_10.Infrastructure.Services;
+using labo_10.Interfaces;
 
 namespace labo_10.Infrastructure;
 
@@ -12,18 +13,19 @@ public static class InfrastructureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         //Database Connection
-        services.AddDbContext<DbContext>((serviceProvider, options) =>
+        services.AddDbContext<DbContext>(options =>
         {
-            var connectionString = configuration.GetConnectionString(name: "DefaultConnection");
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
             options.UseNpgsql(connectionString);
-        });
+        }, contextLifetime: ServiceLifetime.Scoped, optionsLifetime: ServiceLifetime.Scoped);
 
         //ServicesRegister
-        services.AddTransient<IUnitOfWork, UnitOfWork>();
+        //services.AddTransient<IUnitOfWork, UnitOfWork>();
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IFileService, FileService>();
-        services.AddScoped<IUploadFileToAzureStorageService, UploadFileToAzureStorageService>();
-        services.AddScoped<IActivityService, ActivityService>();
+        //services.AddScoped<IFileService, FileService>();
+        //services.AddScoped<IUploadFileToAzureStorageService, UploadFileToAzureStorageService>();
+        //services.AddScoped<IActivityService, ActivityService>();
 
         return services;
     }

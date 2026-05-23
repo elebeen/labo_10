@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "labo_10.Appication", "labo_10.Appication\labo_10.Appication.csproj", "{DE76F2B4-635F-4B45-964F-C23063B5F221}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "labo_10.Application", "labo_10.Application\labo_10.Application.csproj", "{DE76F2B4-635F-4B45-964F-C23063B5F221}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "labo_10.Infrastructure", "labo_10.Infrastructure\labo_10.Infrastructure.csproj", "{EE3CF1C2-0CA8-4AE3-AF65-DF4DF33B083E}"
 EndProject

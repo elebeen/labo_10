@@ -5,19 +5,17 @@ using System.Text;
 
 // Tus namespaces personalizados (ajusta según tu estructura)
 using labo_10.Infrastructure;                      // Para AddInfrastructureServices
-using labo_10.Application.Interfaces;              // Para IClientContextProvider
-using labo_10.Application.Services;
 
 namespace labo_10;
 
-public class ServiceRegistrationExtensions
+public static class ServiceRegistrationExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
 
         // Registra el servicio IClientContextProvider para acceder a los headers de cada request
-        services.AddScoped<IClientContextProvider, ClientContextProvider>();
+        //services.AddScoped<IClientContextProvider, ClientContextProvider>();
 
         // Registro de servicios de Infraestructura
         services.AddInfrastructureServices(configuration);
