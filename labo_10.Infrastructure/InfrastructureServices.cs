@@ -13,11 +13,11 @@ public static class InfrastructureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         //Database Connection
-        services.AddDbContext<DbContext>(options =>
+        services.AddDbContext<ApplicationDbContext>(options =>
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             options.UseNpgsql(connectionString);
-        }, contextLifetime: ServiceLifetime.Scoped, optionsLifetime: ServiceLifetime.Scoped);
+        });
 
         //ServicesRegister
         //services.AddTransient<IUnitOfWork, UnitOfWork>();

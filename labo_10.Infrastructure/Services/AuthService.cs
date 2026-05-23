@@ -69,6 +69,7 @@ public class AuthService : IAuthService
         
         // 4. Guardar utilizando los métodos asíncronos de tu repositorio
         await _userRepository.AddAsync(newUser);
+        await _userRepository.SaveChangesAsync();
         
         // NOTA: Al remover UnitOfWork, el guardado final dependerá de si manejas el SaveChanges 
         // dentro del repositorio, o si inyectas el DbContext aquí. Si tu Repositorio no guarda automáticamente,

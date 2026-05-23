@@ -1,11 +1,4 @@
-using System.Text;
 using labo_10;
-using labo_10.Infrastructure.Models;
-using labo_10.Infrastructure.Services;
-using labo_10.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,11 +43,11 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+/*var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<Context>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();*/
 
 var app = builder.Build();
 

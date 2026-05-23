@@ -4,9 +4,9 @@ namespace labo_10.Infrastructure.Repositories.Implements;
 
 public class Repository<T> : IRepository<T> where T : class
 {
-    protected readonly DbContext _context;
+    protected readonly ApplicationDbContext _context;
 
-    public Repository(DbContext context)
+    public Repository(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -23,7 +23,7 @@ public class Repository<T> : IRepository<T> where T : class
     
     public T FindByName(string name)
     {
-        return _context.Set<T>().FirstOrDefault(e => EF.Property<string>(e, "username") == name);
+        return _context.Set<T>().FirstOrDefault(e => EF.Property<string>(e, "Username") == name);
     }
     
     public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
