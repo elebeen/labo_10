@@ -1,4 +1,6 @@
-﻿namespace labo_10.Infrastructure.Repositories;
+﻿using System.Linq.Expressions;
+
+namespace labo_10.Infrastructure.Repositories;
 
 public interface IRepository<T> where T : class
 {
@@ -7,6 +9,6 @@ public interface IRepository<T> where T : class
     Task AddAsync(T entity);
     void Update(T entity);
     void Delete(T entity);
-    T FindByName(string name);
+    Task<T?> FindFirstAsync(Expression<Func<T, bool>> predicate);
     Task SaveChangesAsync();
 }

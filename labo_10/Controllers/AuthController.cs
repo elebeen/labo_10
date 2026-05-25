@@ -36,12 +36,14 @@ public class AuthController : ControllerBase
         {
             return Unauthorized();
         }
+        
+        var user = _authService.GetUserByEmail(request.Email);
 
         // 2. Definir roles/permisos (esto podría venir de tu BD)
         string role = "Administrator"; 
 
         // 3. Generar token con claims
-        var token = _authService.GenerateJwtToken(request.Email, role);
+        var token = _authService.GenerateJwtToken(user.Id.ToString(),request.Email, role);
 
         return Ok(new { token });
     }

@@ -21,14 +21,15 @@ public class AuthService : IAuthService
         _userRepository = userRepository;
     }
 
-    public string GenerateJwtToken(string userId, string userName)
+    public string GenerateJwtToken(string userId, string userName, string role)
     {
         // 1. Crear los Claims (datos dentro del token)
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId),
             new Claim(JwtRegisteredClaimNames.UniqueName, userName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Role, role)
         };
 
         // 2. Obtener la llave secreta que usaste en ServiceRegistrationExtensions.cs
@@ -49,39 +50,31 @@ public class AuthService : IAuthService
 
     public async Task<bool> RegisterAsync(RegisterRequest request)
     {
-        // 1. Validar si el usuario ya existe usando el método FindByName de tu repositorio
-        // Nota: Como FindByName no es asíncrono en tu interfaz actual, se llama de forma síncrona
-        var existingUser = _userRepository.FindByName(request.Nombre);
-        if (existingUser != null) 
-        {
-            return false; // El usuario ya está registrado
-        }
+        // 1. Validar por Email en lugar de Nombre (es más seguro que sea único)
+        var existingUser = await _userRepository.FindFirstAsync(u => u.Email == request.Email);
+        if (existingUser != null) return false; 
 
-        // 2. Encriptar la contraseña
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-        // 3. Mapear el Request a la Entidad de Dominio
         var newUser = new User()
         {
+            UserId = Guid.NewGuid(),
             Username = request.Nombre,
-            PasswordHash = hashedPassword // Asegúrate de usar el campo correcto de tu entidad
+            // 🔴 DEBES agregar la propiedad Email a tu clase User y mapearla aquí:
+            Email = request.Email, 
+            PasswordHash = hashedPassword 
         };
-        
-        // 4. Guardar utilizando los métodos asíncronos de tu repositorio
+    
         await _userRepository.AddAsync(newUser);
         await _userRepository.SaveChangesAsync();
-        
-        // NOTA: Al remover UnitOfWork, el guardado final dependerá de si manejas el SaveChanges 
-        // dentro del repositorio, o si inyectas el DbContext aquí. Si tu Repositorio no guarda automáticamente,
-        // puedes añadir un método Task SaveChangesAsync() en tu IRepository o ejecutar _context.SaveChangesAsync()
-        
+    
         return true;
     }
 
     public bool ValidateUser(LoginRequest request)
     {
         // 1. Buscar al usuario por nombre usando tu repositorio
-        var existingUser = _userRepository.FindByName(request.Email); // O request.Name según tus propiedades
+        var existingUser = _userRepository.FindFirstAsync(u => u.Email == request.Email).Result; // O request.Name según tus propiedades
         
         // Corregido: Validamos si el usuario de la base de datos realmente existe
         if (existingUser == null)
@@ -93,5 +86,16 @@ public class AuthService : IAuthService
         bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, existingUser.PasswordHash);
         
         return isPasswordValid;
+    }
+
+    public Task<string?> GetUserByEmail(string email)
+    {
+        var user = _userRepository.FindFirstAsync(u => u.Email == email).Result;
+        if (user == null)
+        {
+            return null;
+        }
+        
+        return Task.FromResult(user.Email);
     }
 }

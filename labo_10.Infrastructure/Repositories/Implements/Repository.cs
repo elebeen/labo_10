@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace labo_10.Infrastructure.Repositories.Implements;
 
@@ -21,9 +22,10 @@ public class Repository<T> : IRepository<T> where T : class
     
     public void Delete(T entity) => _context.Set<T>().Remove(entity);
     
-    public T FindByName(string name)
+    public async Task<T?> FindFirstAsync(Expression<Func<T, bool>> predicate)
     {
-        return _context.Set<T>().FirstOrDefault(e => EF.Property<string>(e, "Username") == name);
+        // Esto permite buscar por CUALQUIER propiedad dinámicamente
+        return await _context.Set<T>().FirstOrDefaultAsync(predicate);
     }
     
     public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
