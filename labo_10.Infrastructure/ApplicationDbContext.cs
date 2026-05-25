@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using labo_10.Infrastructure.Models;
+using labo_10.Domain.Models;
 
 namespace labo_10.Infrastructure;
 

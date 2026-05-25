@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using labo_10.Dto;
-using labo_10.Infrastructure.Models;
+using labo_10.Domain.Models;
 using labo_10.Infrastructure.Repositories;
 
 namespace labo_10.Infrastructure.Services;

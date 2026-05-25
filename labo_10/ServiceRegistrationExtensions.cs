@@ -50,6 +50,9 @@ public static class ServiceRegistrationExtensions
                 Description = "API para gestionar recursos."
             });
         });
+        
+        services.AddMediatR(cfg => 
+            cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
         return services;
     }
