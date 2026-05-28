@@ -1,4 +1,4 @@
-﻿namespace labo_10.Dto;
+﻿namespace labo_10.Domain.Dto;
 
 public class LoginRequest
 {

@@ -1,10 +1,9 @@
-﻿using labo_10.Infrastructure.Repositories;
-using labo_10.Infrastructure.Repositories.Implements;
+﻿using labo_10.Domain.Interfaces;
+using labo_10.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using labo_10.Infrastructure.Services;
-using labo_10.Interfaces;
 
 namespace labo_10.Infrastructure;
 
@@ -22,7 +21,7 @@ public static class InfrastructureServices
         //ServicesRegister
         //services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IJwtService, JwtService>();
         //services.AddScoped<IFileService, FileService>();
         //services.AddScoped<IUploadFileToAzureStorageService, UploadFileToAzureStorageService>();
         //services.AddScoped<IActivityService, ActivityService>();

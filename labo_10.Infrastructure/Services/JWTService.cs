@@ -1,24 +1,19 @@
-﻿using labo_10.Interfaces;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using labo_10.Dto;
-using labo_10.Domain.Models;
-using labo_10.Infrastructure.Repositories;
+using labo_10.Domain.Interfaces;
 
 namespace labo_10.Infrastructure.Services;
 
-public class AuthService : IAuthService
+public class JwtService : IJwtService
 {
     private readonly IConfiguration _configuration;
-    private readonly IRepository<User> _userRepository;
 
-    public AuthService(IConfiguration configuration, IRepository<User> userRepository)
+    public JwtService(IConfiguration configuration)
     {
         _configuration = configuration;
-        _userRepository = userRepository;
     }
 
     public string GenerateJwtToken(string userId, string userName, string role)
@@ -48,7 +43,7 @@ public class AuthService : IAuthService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public async Task<bool> RegisterAsync(RegisterRequest request)
+    /*public async Task<bool> RegisterAsync(RegisterRequest request)
     {
         // 1. Validar por Email en lugar de Nombre (es más seguro que sea único)
         var existingUser = await _userRepository.FindFirstAsync(u => u.Email == request.Email);
@@ -97,5 +92,5 @@ public class AuthService : IAuthService
         }
         
         return Task.FromResult(user.Email);
-    }
+    }*/
 }

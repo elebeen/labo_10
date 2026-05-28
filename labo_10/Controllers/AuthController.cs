@@ -1,5 +1,5 @@
-﻿using labo_10.Dto;
-using labo_10.Interfaces;
+﻿using labo_10.UseCases.Auth.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,41 +9,25 @@ namespace labo_10.Controllers;
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IMediator _mediator;
     
-    public AuthController(IAuthService authService)
+    public AuthController(IMediator mediator)
     {
-        _authService = authService;
+        _mediator = mediator;
     }
     
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+    public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        var success = await _authService.RegisterAsync(request);
-
-        if (!success)
-            return BadRequest("El usuario ya existe o hubo un error.");
+        await _mediator.Send(command);
 
         return Ok(new { message = "Usuario registrado exitosamente" });
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
     {
-        if (!_authService.ValidateUser(request))
-        {
-            return Unauthorized();
-        }
-        
-        var user = _authService.GetUserByEmail(request.Email);
-
-        // 2. Definir roles/permisos (esto podría venir de tu BD)
-        string role = "Administrator"; 
-
-        // 3. Generar token con claims
-        var token = _authService.GenerateJwtToken(user.Id.ToString(),request.Email, role);
+        var token = await _mediator.Send(command);
 
         return Ok(new { token });
     }

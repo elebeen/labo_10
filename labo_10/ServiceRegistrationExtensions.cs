@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -52,7 +53,8 @@ public static class ServiceRegistrationExtensions
         });
         
         services.AddMediatR(cfg => 
-            cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+        services.AddMediatR(cfg => cfg.LicenseKey = configuration["LicenseKey"]);
 
         return services;
     }

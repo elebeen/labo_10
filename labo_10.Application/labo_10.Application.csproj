@@ -22,6 +22,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\labo_10.Domain\labo_10.Domain.csproj" />
+      <ProjectReference Include="..\labo_10.Infrastructure\labo_10.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="UseCases\" />
     </ItemGroup>
 
 </Project>
