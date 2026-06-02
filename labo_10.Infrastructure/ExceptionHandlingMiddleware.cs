@@ -24,6 +24,7 @@ public class ExceptionHandlingMiddleware
 
             var response = new { message = ex.Message };
             await context.Response.WriteAsJsonAsync(response);
+            Console.WriteLine(ex.Message);
         }
         catch (Exception) // Captura cualquier otro error inesperado (Error 500)
         {

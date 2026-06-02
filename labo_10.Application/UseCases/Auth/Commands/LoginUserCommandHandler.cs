@@ -4,6 +4,12 @@ using MediatR;
 
 namespace labo_10.UseCases.Auth.Commands;
 
+public class LoginUserCommand : IRequest<string?>
+{
+    public required string Email { get; set; } 
+    public required string Password { get; set; }
+}
+
 internal sealed record LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string?>
 {
     private readonly IRepository<User> _userRepository;
@@ -15,10 +21,10 @@ internal sealed record LoginUserCommandHandler : IRequestHandler<LoginUserComman
         _jwtService = jwtService;
     }
 
-    public Task<string?> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         // 1. Validar el usuario
-        var existingUser = _userRepository.FindFirstAsync(u => u.Email == request.Email).Result;
+        var existingUser = await _userRepository.FindFirstAsync(u => u.Email == request.Email);
         
         if (existingUser == null || !BCrypt.Net.BCrypt.Verify(request.Password, existingUser.PasswordHash))
         {
@@ -27,9 +33,10 @@ internal sealed record LoginUserCommandHandler : IRequestHandler<LoginUserComman
         }
 
         // 2. Generar el Token
-        string role = "Administrator";
+        //string role = "Administrator";
+        const string role = "Administrator";
         var token = _jwtService.GenerateJwtToken(existingUser.UserId.ToString(), request.Email, role);
 
-        return Task.FromResult<string?>(token);
+        return token;
     }
 }

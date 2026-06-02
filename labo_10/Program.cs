@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.PostgreSql;
 using labo_10;
 using labo_10.Infrastructure;
 using Microsoft.OpenApi.Models;
@@ -44,8 +46,21 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+// Configurar Hangfire con SQL Server Storage
+builder.Services.AddHangfire(config =>
+{
+    config.UsePostgreSqlStorage(builder.Configuration.GetConnectionString("Hangfire"));
+    
+    // Opcional: configuración adicional
+    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180);
+    config.UseSimpleAssemblyNameTypeSerializer();
+    config.UseRecommendedSerializerSettings();
+});
+
 var app = builder.Build();
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseHangfireDashboard("/hangfire");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

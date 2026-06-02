@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Hangfire;
 
 // Tus namespaces personalizados (ajusta según tu estructura)
-using labo_10.Infrastructure;                      // Para AddInfrastructureServices
+using labo_10.Infrastructure;
+using labo_10.UseCases.Auth.Commands;
+using MediatR; // Para AddInfrastructureServices
 
 namespace labo_10;
 
@@ -53,9 +56,14 @@ public static class ServiceRegistrationExtensions
         });
         
         services.AddMediatR(cfg => 
-            cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-        services.AddMediatR(cfg => cfg.LicenseKey = configuration["LicenseKey"]);
-
+        {
+            cfg.RegisterServicesFromAssemblies(
+                Assembly.GetExecutingAssembly(),
+                typeof(LoginUserCommand).Assembly,
+                typeof(RegisterUserCommand).Assembly
+            );
+            cfg.LicenseKey = configuration["LicenseKey"];
+        });
         return services;
     }
 }
