@@ -18,9 +18,6 @@ public static class ServiceRegistrationExtensions
     {
         services.AddHttpContextAccessor();
 
-        // Registra el servicio IClientContextProvider para acceder a los headers de cada request
-        //services.AddScoped<IClientContextProvider, ClientContextProvider>();
-
         // Registro de servicios de Infraestructura
         services.AddInfrastructureServices(configuration);
 
@@ -52,6 +49,30 @@ public static class ServiceRegistrationExtensions
                 Title = "ML API",
                 Version = "v1",
                 Description = "API para gestionar recursos."
+            });
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Token"
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] {}
+                }
             });
         });
         
