@@ -1,4 +1,5 @@
 ﻿using labo_10.UseCases.Auth.Commands;
+using labo_10.UseCases.Reports;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,5 +36,33 @@ public class AuthController : ControllerBase
     public IActionResult GetAdmin()
     {
         return Ok("solo admins");
+    }
+
+    [HttpPost("reports")]
+    public async Task<OkResult> MakeReports(UsersReportCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
+
+    [HttpPost("editReports")]
+    public async Task<OkResult> EditReports(ModifyReportCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
+
+    [HttpPost("table")]
+    public async Task<OkResult> CreateTable(CreateTableCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
+
+    [HttpPost("estilos")]
+    public async Task<OkResult> CreateFileWithStyle(CreateFileWithStyleCommand command)
+    {
+        await  _mediator.Send(command);
+        return Ok();
     }
 }

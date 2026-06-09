@@ -2,5 +2,8 @@
 
 public interface IClosedXmlService
 {
-    public string GenerateJwtToken(string userId, string userName, string role);
+    public void FirstExample();
+    public void ModifyArchive();
+    public void ThirdExample();
+    public void FourthExample();
 }

@@ -8,6 +8,7 @@ using Hangfire;
 // Tus namespaces personalizados (ajusta según tu estructura)
 using labo_10.Infrastructure;
 using labo_10.UseCases.Auth.Commands;
+using labo_10.UseCases.Reports;
 using MediatR; // Para AddInfrastructureServices
 
 namespace labo_10;
@@ -81,7 +82,8 @@ public static class ServiceRegistrationExtensions
             cfg.RegisterServicesFromAssemblies(
                 Assembly.GetExecutingAssembly(),
                 typeof(LoginUserCommand).Assembly,
-                typeof(RegisterUserCommand).Assembly
+                typeof(RegisterUserCommand).Assembly,
+                typeof(UsersReportCommand).Assembly
             );
             cfg.LicenseKey = configuration["LicenseKey"];
         });
