@@ -26,7 +26,7 @@ public static class InfrastructureServices
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITicketRepository, TicketRepository>();
         services.AddScoped<IJwtService, JwtService>();
-        services.AddScoped<NotificationService>();
+        // services.AddScoped<NotificationService>();
         services.AddScoped<IClosedXmlService, ClosedXmlService>();
         //services.AddScoped<IFileService, FileService>();
         //services.AddScoped<IUploadFileToAzureStorageService, UploadFileToAzureStorageService>();

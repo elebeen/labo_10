@@ -1,6 +1,6 @@
 ﻿namespace labo_10.Infrastructure.Services;
 
-public class NotificationService
+/*public class NotificationService
 {
     private static int _attemptCount = 0;
 
@@ -19,4 +19,4 @@ public class NotificationService
 
         Console.WriteLine($"Notificación enviada correctamente a {user}");
     }
-}
+}*/
