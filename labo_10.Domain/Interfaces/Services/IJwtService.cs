@@ -1,4 +1,4 @@
-﻿namespace labo_10.Domain.Interfaces;
+﻿namespace labo_10.Domain.Interfaces.Services;
 
 public interface IJwtService
 {

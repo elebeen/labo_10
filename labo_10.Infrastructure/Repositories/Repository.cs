@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using labo_10.Domain.Interfaces;
+using labo_10.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace labo_10.Infrastructure.Repositories;

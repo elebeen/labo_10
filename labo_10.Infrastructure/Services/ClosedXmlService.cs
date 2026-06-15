@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
-using labo_10.Domain.Interfaces;
+using labo_10.Domain.Interfaces.Services;
+using labo_10.Domain.Models;
 
 namespace labo_10.Infrastructure.Services;
 
@@ -79,6 +80,89 @@ public class ClosedXmlService : IClosedXmlService
             worksheet.Cell(2, 3).Value = 22;
             
             workbook.SaveAs("archivo_stilos.xlsx");
+        }
+    }
+
+    public byte[] GenerateTicketsReport(IEnumerable<Ticket> tickets)
+    {
+        using (var workbook = new XLWorkbook())
+        {
+            var worksheet = workbook.Worksheets.Add("Reporte de Tickets");
+            
+            // Configurar Cabeceras
+            var headerRow = worksheet.Row(1);
+            headerRow.Style.Font.Bold = true;
+            headerRow.Style.Fill.BackgroundColor = XLColor.LightGray;
+            headerRow.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+            worksheet.Cell(1, 1).Value = "ID Ticket";
+            worksheet.Cell(1, 2).Value = "Título";
+            worksheet.Cell(1, 3).Value = "Estado";
+            worksheet.Cell(1, 4).Value = "Creado por";
+            worksheet.Cell(1, 5).Value = "Respuestas (Usuario: Mensaje)";
+
+            int row = 2;
+            foreach (var ticket in tickets)
+            {
+                worksheet.Cell(row, 1).Value = ticket.TicketId.ToString();
+                worksheet.Cell(row, 2).Value = ticket.Title;
+                worksheet.Cell(row, 3).Value = ticket.Status;
+                worksheet.Cell(row, 4).Value = ticket.User?.Username ?? "Desconocido";
+                
+                // Formatear las respuestas en una sola celda
+                var respuestas = ticket.Responses
+                    .Select(r => $"[{r.Responder?.Username}]: {r.Message}");
+                worksheet.Cell(row, 5).Value = string.Join(" | ", respuestas);
+                
+                row++;
+            }
+
+            worksheet.Columns().AdjustToContents(); // Auto-ajustar ancho de columnas
+            using (var stream = new MemoryStream())
+            {
+                workbook.SaveAs(stream);
+                return stream.ToArray();
+            }
+        }
+    }
+
+    public byte[] GenerateUsersRolesReport(IEnumerable<User> users)
+    {
+        using (var workbook = new XLWorkbook())
+        {
+            var worksheet = workbook.Worksheets.Add("Reporte de Usuarios");
+            
+            // Configurar Cabeceras
+            var headerRow = worksheet.Row(1);
+            headerRow.Style.Font.Bold = true;
+            headerRow.Style.Fill.BackgroundColor = XLColor.LightBlue;
+            headerRow.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+            worksheet.Cell(1, 1).Value = "ID Usuario";
+            worksheet.Cell(1, 2).Value = "Username";
+            worksheet.Cell(1, 3).Value = "Email";
+            worksheet.Cell(1, 4).Value = "Roles Asignados";
+
+            int row = 2;
+            foreach (var user in users)
+            {
+                worksheet.Cell(row, 1).Value = user.UserId.ToString();
+                worksheet.Cell(row, 2).Value = user.Username;
+                worksheet.Cell(row, 3).Value = user.Email;
+                
+                // Obtener los nombres de los roles mapeados a través de UserRoles
+                var roles = user.UserRoles.Select(ur => ur.Role?.RoleName);
+                worksheet.Cell(row, 4).Value = string.Join(", ", roles);
+                
+                row++;
+            }
+
+            worksheet.Columns().AdjustToContents();
+            using (var stream = new MemoryStream())
+            {
+                workbook.SaveAs(stream);
+                return stream.ToArray();
+            }
         }
     }
 }

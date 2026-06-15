@@ -65,4 +65,18 @@ public class AuthController : ControllerBase
         await  _mediator.Send(command);
         return Ok();
     }
+
+    [HttpPost("reporte-tickets")]
+    public async Task<IActionResult> GenerateTicketsReport()
+    {
+        var response = await _mediator.Send(new GenerateTicketsReportCommand());
+        return File(response.FileBytes, response.ContentType, response.FileName);
+    }
+
+    [HttpPost("reporte-usuarios")]
+    public async Task<IActionResult> GenerateUsersReport()
+    {
+        var response = await _mediator.Send(new GenerateUsersReportCommand());
+        return File(response.FileBytes, response.ContentType, response.FileName);
+    }
 }

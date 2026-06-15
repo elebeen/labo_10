@@ -1,4 +1,6 @@
 ﻿using labo_10.Domain.Interfaces;
+using labo_10.Domain.Interfaces.Repositories;
+using labo_10.Domain.Interfaces.Services;
 using labo_10.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +23,8 @@ public static class InfrastructureServices
         //ServicesRegister
         //services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITicketRepository, TicketRepository>();
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<NotificationService>();
         services.AddScoped<IClosedXmlService, ClosedXmlService>();

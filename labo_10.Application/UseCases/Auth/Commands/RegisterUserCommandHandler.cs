@@ -1,4 +1,5 @@
 ﻿using labo_10.Domain.Interfaces;
+using labo_10.Domain.Interfaces.Repositories;
 using labo_10.Domain.Models;
 using MediatR;
 

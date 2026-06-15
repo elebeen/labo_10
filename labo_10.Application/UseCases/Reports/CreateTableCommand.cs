@@ -1,4 +1,4 @@
-﻿using labo_10.Domain.Interfaces;
+﻿using labo_10.Domain.Interfaces.Services;
 using MediatR;
 
 namespace labo_10.UseCases.Reports;
